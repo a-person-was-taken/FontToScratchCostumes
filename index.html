@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Stamp Font Engine Injector</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:r,b,semibold" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+</head>
+<body>
+    <div id="main">
+        <script type="text/javascript" src="opentype.min.js"></script>
+        <script type="text/javascript" src="jszip.min.js"></script>
+        <script type="text/javascript" src="crypto-js.min.js"></script>
+        <script type="text/javascript" src="main.js"></script>
+
+        <h1>Griffpatch Scratch Font Converter</h1>
+        <p><i>Adapted directly from RexScratch's Stamp Font Engine Font Injector</i></p>
+
+        <h6><b>Step 1</b> - Download a Font File to your device (i.e. from Google Fonts .ttf or .otf)</h6>
+        <p><a href="https://fonts.google.com/">https://fonts.google.com/</a></p>
+        <br>
+
+        <h6><b>Step 2</b> - Import the font into this page here:</h6>
+        <p><input type="file" accept=".ttf,.otf" onchange="openFont(event)"></p>
+        <br>
+        
+        <div id="fontSelected" style="display: none;">
+            <!-- <h6>Name of Font to be used in Project</h6> -->
+            <input type="hidden" id="fontName" readonly>
+
+            <!-- <h6>Character Set to Inject</h6> -->
+            <input type="hidden" id="charset" value=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$¢€£¥%^&amp;*()-–—=≠≈[]\;&apos;‘’,./_+{}|:&quot;“”&lt;≤≥&gt;?`~×÷±°′″">
+            <!-- <p style="font-weight:600;">Note: All characters of a pre-existing font will be removed before adding the characters above</p> -->
+
+            <h6><b>Step 3</b> - Do you want to create a new Sprite File, or modify an existing sprite?</h6>
+            <p>To modify an existing sprite, first export your sprite from scratch, then load it up below.</p>
+            <p>
+                <button type="submit" onclick="submit()">Create a New Sprite</button>
+                or
+                <input type="file" id="sb3File" accept=".sprite3" onchange="openSb3(event)">
+            <!-- <p style="font-weight:600;">Note: The project must contain a Stamp Font Engine sprite. Using a new project won&apos;t work.</p> -->
+            <!-- <h6>Name of Stamp Font Engine Sprite in Project</h6>
+            <input type="text" value="Stamp Font" id="spriteName"> -->
+            </p>
+        </div>
+
+<!--         <p>The resulting sprite3 file can be imported into any Scratch project as a new sprite</p>
+
+        <h2>Libraries Used</h2>
+        <p>For anyone curious:</p>
+        <ul>
+            <li>RexScratch on GitHub <a href="https://github.com/RexScratch/RexScratch.github.io/">(Link)</a></li>
+            <li>opentype.js <a href="https://github.com/opentypejs/opentype.js">(Link)</a></li>
+            <li>JSZip <a href="https://github.com/Stuk/jszip">(Link)</a></li>
+            <li>crypto-js <a href="https://github.com/brix/crypto-js">(Link)</a></li>
+        </ul>
+ -->    
+    </div>
+
+</body>
+</html>
