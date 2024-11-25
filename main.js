@@ -40,6 +40,7 @@ function md5(text) {
 // }
 
 let fonts = {};
+let iteration = 0;
 
 function openFont(event) {
 
@@ -64,6 +65,13 @@ function openFont(event) {
         }
     };
 
+    const fontSelect = document.getElementById("fontSelect");
+    fontSelect.innerHTML = '';
+    fonts = {};
+    fontSelect.style.display = 'none';
+    document.getElementById('fontSelected').style.display = 'none';
+    iteration++;
+
     /** @type File */
     const file = event.target.files[0];
     if (!file) {
@@ -72,11 +80,6 @@ function openFont(event) {
 
     var reader = new FileReader();
     reader.onload = function () {
-
-        const fontSelect = document.getElementById("fontSelect");
-        fontSelect.innerHTML = '';
-        fontSelect.style.display = 'none';
-        document.getElementById('fontSelected').style.display = 'none';
 
         if (file.name.indexOf('zip') >= 0) {
             findFontFilesInZip(reader.result).then(parseFontZip);
@@ -125,9 +128,14 @@ function openFont(event) {
         const fontSelect = document.getElementById("fontSelect");
         fontSelect.style.display = 'block';
 
+        const myIteration = iteration;
+
         for (const fileName of fonts) {
             const fileContent = await zip.files[fileName].async("arraybuffer");
             const font = opentype.parse(fileContent);
+            if (iteration !== myIteration) {
+                break;
+            }
             const path = font.getPath("ABCDEFGadcdefg - " + font.names.fullName?.en, 8, 24, 22).toPathData(3);
             const svg = `<svg width="800px" height="32px" xmlns="http://www.w3.org/2000/svg"><path fill="#000" d="${path}"/></svg>`;
             fontSelect.insertAdjacentHTML("beforeend", `<label class='fontRadio'><input type='radio' name='fontSelect' value='${fileName}'>${svg}</label>`);
