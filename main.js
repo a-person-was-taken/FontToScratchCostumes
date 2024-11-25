@@ -6,10 +6,95 @@ function md5(text) {
     return CryptoJS.MD5(text).toString();
 }
 
+// window.onload = () => {
+//     getGoogleFonts('');
+// };
+
+// /**
+//  * 
+//  * @param {HTMLSelectElement} select 
+//  * @param {string} optionText 
+//  */
+// function addOption(select, optionText) {
+//     const option = document.createElement('option');
+//     option.text = optionText;
+//     option.value = optionText;
+//     select.options.add(option);
+// }
+
+// function getGoogleFonts(apiKey) {
+//     const xhr = new XMLHttpRequest();
+//     xhr.open('get', 'https://www.googleapis.com/webfonts/v1/webfonts?key=' + apiKey, true);
+
+//     const selectFamily = document.getElementById('selectFamily');
+
+//     xhr.onloadend = () => {
+//         const fontList = JSON.parse(xhr.responseText);
+//         fontList.items.forEach(font => addOption(selectFamily, font.family));
+//         // this.loadVariants();
+//         // this.handleEvents();
+//         // this.readQueryParams();
+//         // this.renderCurrent();
+//     };
+//     xhr.send();
+// }
+
+let fonts = {};
+
 function openFont(event) {
+
+    let zip;
+
+    const findFontFilesInZip = async (zipData) => {
+        try {
+            // Load the ZIP file with JSZip
+            zip = await JSZip.loadAsync(zipData);
+
+            // Find all files with ".ttf" or ".otf" extensions
+            /**
+             * @type String[]
+             */
+            const fontFiles = Object.keys(zip.files).filter((fileName) => {
+                return /* fileName.indexOf('/static/') === -1 &&  */(fileName.endsWith(".ttf") || fileName.endsWith(".otf"));
+            });
+
+            return fontFiles;
+        } catch (err) {
+            console.error("Error processing ZIP file:", err);
+        }
+    };
+
+    /** @type File */
+    const file = event.target.files[0];
+    if (!file) {
+        return;
+    }
+
     var reader = new FileReader();
     reader.onload = function () {
-        font = opentype.parse(reader.result);
+
+        const fontSelect = document.getElementById("fontSelect");
+        fontSelect.innerHTML = '';
+        fontSelect.style.display = 'none';
+        document.getElementById('fontSelected').style.display = 'none';
+
+        if (file.name.indexOf('zip') >= 0) {
+            findFontFilesInZip(reader.result).then(parseFontZip);
+            return;
+        }
+
+        const font = opentype.parse(reader.result);
+        fontSelect.style.display = 'block';
+        const path = font.getPath("ABCDEFGadcdefg - " + font.names.fullName?.en, 8, 24, 22).toPathData(3);
+        const svg = `<svg width="800px" height="32px" xmlns="http://www.w3.org/2000/svg"><path fill="#000" d="${path}"/></svg>`;
+        fontSelect.insertAdjacentHTML("beforeend", `<label class='fontRadio'><input type='radio' name='fontSelect' value='${fileName}' checked>${svg}</label>`);
+
+        selectFont(font);
+    }
+
+    function selectFont(font0) {
+        font = font0;
+
         const bounds = font.getPath('H', 0, 0, 1).getBoundingBox();
         fontSize = 16 / (bounds.y2 - bounds.y1);
 
@@ -20,10 +105,36 @@ function openFont(event) {
             document.getElementById("fontName").value = name;
         }
 
+        fileName = name + ".sprite3";
+
         document.getElementById('fontSelected').style.display = 'block';
     }
 
-    reader.readAsArrayBuffer(event.target.files[0]);
+    reader.readAsArrayBuffer(file);
+
+    /**
+     * Let's parse ALL the fonts!
+     * @param {String[]} fonts 
+     */
+    async function parseFontZip(fonts) {
+        // const fontName = document.getElementById("fontName");
+        // fontName.style.display = 'block';
+        // for (const fileName of fonts) {
+        //     fontName.insertAdjacentHTML("beforeend", `<option value='${fileName}}'>${fileName}}</option>`);
+
+        const fontSelect = document.getElementById("fontSelect");
+        fontSelect.style.display = 'block';
+
+        for (const fileName of fonts) {
+            const fileContent = await zip.files[fileName].async("arraybuffer");
+            const font = opentype.parse(fileContent);
+            const path = font.getPath("ABCDEFGadcdefg - " + font.names.fullName?.en, 8, 24, 22).toPathData(3);
+            const svg = `<svg width="800px" height="32px" xmlns="http://www.w3.org/2000/svg"><path fill="#000" d="${path}"/></svg>`;
+            fontSelect.insertAdjacentHTML("beforeend", `<label class='fontRadio'><input type='radio' name='fontSelect' value='${fileName}'>${svg}</label>`);
+            fontSelect.lastElementChild.addEventListener("change", e => selectFont(font));
+            fonts[fileName] = font;
+        }
+    };
 }
 
 function openSb3() {
@@ -34,10 +145,12 @@ function openSb3() {
 
     const target = document.getElementById("sb3File");
     fileName = target.files[0].name;
-    reader.readAsArrayBuffer(target.files[0]);
+    if (fileName) {
+        reader.readAsArrayBuffer(fileName);
+    }
 }
 
-function submit() {
+function createNewSprite() {
     const zip = new JSZip();
     inject(zip);
 }
@@ -150,5 +263,7 @@ function download(data) {
     link.href = "data:application/zip;base64," + data;
     document.body.appendChild(link);
     link.click();
+
+    document.getElementById('sb3File').value = null;
     // alert("The project has been downloaded");
 }

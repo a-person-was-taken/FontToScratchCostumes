@@ -84,3 +84,13 @@ h6 {
 p {
     padding-left: 0.2rem;
 }
+
+.fontRadio {
+    display: flex;
+}
+
+#fontSelect {
+    display: block;
+    max-height: 25vh;
+    overflow-y: auto;
+}

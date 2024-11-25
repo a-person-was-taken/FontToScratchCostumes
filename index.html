@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Stamp Font Engine Injector</title>
+    <title>Griffpatch Font To Scratch Costumes</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:r,b,semibold" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
@@ -19,28 +19,40 @@
         <h1>Griffpatch Scratch Font Converter</h1>
         <p><i>Adapted directly from RexScratch's Stamp Font Engine Font Injector</i></p>
 
-        <h6><b>Step 1</b> - Download a Font File to your device (i.e. from Google Fonts .ttf or .otf)</h6>
+        <h6><b>Step 1</b> - Download a Font File to your device (i.e. from Google Fonts .ttf, .otf or .zip)</h6>
+
+        <!-- <div class="input-holder">
+            <label>Google font: <select id="selectFamily" class="input"></select></label>
+        </div> -->
+
         <p><a href="https://fonts.google.com/">https://fonts.google.com/</a></p>
         <br>
 
         <h6><b>Step 2</b> - Import the font into this page here:</h6>
-        <p><input type="file" accept=".ttf,.otf" onchange="openFont(event)"></p>
+        <p><input type="file" accept=".ttf,.otf,.zip" onchange="openFont(event)"></p>
         <br>
-        
+
+        <!-- <h6>Name of Font to be used in Project</h6> -->
+        <select id="fontName" style="display: none;"></select>
+
+        <fieldset id="fontSelect" style="display: none;">
+
+        </fieldset>
+        <br>
+
         <div id="fontSelected" style="display: none;">
-            <!-- <h6>Name of Font to be used in Project</h6> -->
-            <input type="hidden" id="fontName" readonly>
 
             <!-- <h6>Character Set to Inject</h6> -->
             <input type="hidden" id="charset" value=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$¢€£¥%^&amp;*()-–—=≠≈[]\;&apos;‘’,./_+{}|:&quot;“”&lt;≤≥&gt;?`~×÷±°′″">
             <!-- <p style="font-weight:600;">Note: All characters of a pre-existing font will be removed before adding the characters above</p> -->
 
             <h6><b>Step 3</b> - Do you want to create a new Sprite File, or modify an existing sprite?</h6>
-            <p>To modify an existing sprite, first export your sprite from scratch, then load it up below.</p>
             <p>
-                <button type="submit" onclick="submit()">Create a New Sprite</button>
-                or
-                <input type="file" id="sb3File" accept=".sprite3" onchange="openSb3(event)">
+                <p><i>Creates a New Sprite file for importing into Scratch</i></p>
+                <p><button type="submit" onclick="createNewSprite()">Create a New Sprite</button></p>
+                <p><i>or, Import an existing sprite (exported from Scratch), which is then updated with these new font costumes.</i></p>
+                <p><label><button onclick="document.getElementById('sb3File').click();">Modify Existing Sprite</button><input type="file" id="sb3File" accept=".sprite3" onchange="openSb3(event)" style="display:none;"></label></p>
+
             <!-- <p style="font-weight:600;">Note: The project must contain a Stamp Font Engine sprite. Using a new project won&apos;t work.</p> -->
             <!-- <h6>Name of Stamp Font Engine Sprite in Project</h6>
             <input type="text" value="Stamp Font" id="spriteName"> -->
