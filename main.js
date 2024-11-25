@@ -154,7 +154,7 @@ function openSb3() {
     const target = document.getElementById("sb3File");
     fileName = target.files[0].name;
     if (fileName) {
-        reader.readAsArrayBuffer(fileName);
+        reader.readAsArrayBuffer(target.files[0]);
     }
 }
 
