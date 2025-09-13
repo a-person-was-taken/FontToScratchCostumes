@@ -210,7 +210,7 @@ function inject(sb3) {
 
             sprite.costumes.splice(costumeIndex, 0, {
                 assetId: md5Value,
-                name: char,
+                name: font.names.fullName.en + " - " + char,
                 md5ext: md5Value + ".svg",
                 dataFormat: "svg",
                 bitmapResolution: 1,
